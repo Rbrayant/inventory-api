@@ -30,6 +30,10 @@ def create_app(database_url=None):
         if (type(quantity) is not int
                 or not -2147483648 <= quantity <= 2147483647):
             return False
+        # QUANTITY_FIX_START
+        if quantity < 0:
+            return False
+        # QUANTITY_FIX_END
         return True
 
     def authorized():
