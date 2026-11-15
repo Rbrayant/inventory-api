@@ -2,7 +2,7 @@
 import os
 import secrets
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, render_template, request
 from sqlalchemy import Column, Integer, MetaData, String, Table
 from sqlalchemy import create_engine, delete, insert, select, text, update
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
@@ -25,6 +25,10 @@ def create_app(database_url=None):
     # Initialize the schema separately to avoid worker startup races.
     app.extensions["database"] = engine
     app.extensions["metadata"] = metadata
+
+    @app.get("/")
+    def dashboard():
+        return render_template("dashboard.html")
 
     def valid_quantity(quantity):
         if (type(quantity) is not int
