@@ -68,13 +68,14 @@ jobs:
       IMAGE: ${{ needs.publish.outputs.image }}
       VERSION: ${{ needs.publish.outputs.version }}
       DIGEST: ${{ needs.publish.outputs.digest }}
-      KUBECONFIG: ${{ runner.temp }}/inventory-api-kubeconfig
     steps:
       - uses: actions/checkout@v4
       - name: Configure protected cluster credentials
         env:
           KUBE_CONFIG_B64: ${{ secrets.KUBE_CONFIG_B64 }}
         run: |
+          export KUBECONFIG="$RUNNER_TEMP/inventory-api-kubeconfig"
+          echo "KUBECONFIG=$KUBECONFIG" >> "$GITHUB_ENV"
           umask 077
           printf '%s' "$KUBE_CONFIG_B64" | base64 --decode > "$KUBECONFIG"
           test -s "$KUBECONFIG"
