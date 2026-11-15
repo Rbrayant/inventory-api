@@ -37,7 +37,7 @@ jobs:
       - name: Build once
         run: docker build -t inventory-api:validated .
       - name: Scan exactly the image that will be published
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: inventory-api:validated
           severity: CRITICAL,HIGH
