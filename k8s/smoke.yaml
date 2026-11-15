@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: smoke-__RUN_ID__
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 120
+  ttlSecondsAfterFinished: 600
+  template:
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      containers:
+        - name: smoke
+          image: __IMAGE__@__DIGEST__
+          command: [python, scripts/verify_service.py]
+          env:
+            - {name: EXPECTED_VERSION, value: "__VERSION__"}
+            - {name: EXPECTED_REVISION, value: "__REVISION__"}
+          envFrom:
+            - secretRef: {name: inventory-api-secret}
+          resources:
+            requests: {cpu: 50m, memory: 64Mi}
+            limits: {cpu: 250m, memory: 128Mi}

@@ -1,0 +1,14 @@
+.git
+.github
+.pytest_cache
+__pycache__
+*.pyc
+tests/
+k8s/
+docs/
+demo/
+*.md
+.env
+.venv
+*.db
+secret.yaml

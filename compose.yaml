@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: item
+      POSTGRES_DB: items
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+    volumes: [item-data:/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U item -d items"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+  migrate:
+    build: .
+    command: [flask, --app, app.main, init-db]
+    environment:
+      DATABASE_URL: postgresql+psycopg://item:${DB_PASSWORD}@db:5432/items
+    depends_on:
+      db: {condition: service_healthy}
+  api:
+    build: .
+    ports: ['${API_PORT:-8001}:8000']
+    environment:
+      API_TOKEN: ${API_TOKEN:?Set API_TOKEN in .env}
+      DATABASE_URL: postgresql+psycopg://item:${DB_PASSWORD}@db:5432/items
+      APP_VERSION: local
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+volumes:
+  item-data:

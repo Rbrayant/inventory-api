@@ -1,0 +1,25 @@
+digraph architecture {
+ graph [rankdir=TB, bgcolor="white", pad="0.25", nodesep="0.35", ranksep="0.45"];
+ node [shape=box, style="rounded,filled", fillcolor="#edf4f8", color="#306b82", fontname="DejaVu Sans", fontsize=13, margin="0.16,0.12"];
+ edge [color="#356a80", fontname="DejaVu Sans", fontsize=10];
+ repo [label="GitHub repository\ndev + reviewed main PRs"];
+ ci [label="Hosted runner\nlint + tests + Docker build + Trivy"];
+ artifact [label="Validated image artifact\npublication blocked on failure"];
+ registry [label="GHCR\nversion / commit tags + image digest"];
+ runner [label="Trusted self-hosted runner\nprotected, scoped cluster credentials"];
+ subgraph cluster_k8s {
+  label="Kubernetes namespace: inventory-api";fontname="DejaVu Sans";fontsize=14;color="#a8bdc9";
+  jobs [label="Schema initialization job\nthen API rolling update"];
+  service [label="Service\nHTTP smoke job verifies version + CRUD"];
+  pod1 [label="API pod 1\n2 workers"];
+  pod2 [label="API pod 2\n2 workers"];
+  postgres [label="PostgreSQL Service + database\n1 replica, 1Gi persistent volume"];
+  config [label="ConfigMap + Secrets\nnon-sensitive / sensitive configuration"];
+  jobs -> service;
+  service -> pod1;service -> pod2;
+  pod1 -> postgres;pod2 -> postgres;
+  config -> pod1 [style=dashed];config -> pod2 [style=dashed];
+ }
+ repo -> ci;ci -> artifact;artifact -> registry;registry -> runner [label="deploy exact digest"];
+ runner -> jobs;
+}

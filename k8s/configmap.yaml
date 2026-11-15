@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: inventory-api-config
+data:
+  APP_NAME: "Inventory Tracker"
+  LOG_LEVEL: "info"

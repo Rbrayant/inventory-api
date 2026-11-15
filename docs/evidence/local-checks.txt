@@ -1,0 +1,15 @@
+Local verification, 2026-11-15
+Docker, Trivy, GitHub Actions and Kubernetes were not run here.
+
+$ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python -m pytest -q -ra
+.............s................                                           [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_postgres.py:8: PostgreSQL integration URL not supplied
+29 passed, 1 skipped in 0.18s
+Exit: 0
+
+$ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python -m flake8 app tests scripts
+Exit: 0
+
+$ bash -n scripts/deploy.sh scripts/create_secrets.sh scripts/create_runner_config.sh
+Exit: 0

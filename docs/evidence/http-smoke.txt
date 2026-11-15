@@ -1,0 +1,3 @@
+Actual local HTTP smoke test with two Gunicorn workers and a shared SQLite file.
+Kubernetes Service and PostgreSQL are not verified by this local check.
+Service ready, shared storage verified: v1.2.0 (local-source-check)

@@ -1,0 +1,60 @@
+name: CI
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev, main]
+  workflow_call:
+permissions:
+  contents: read
+jobs:
+  validate:
+    name: Lint, tests, build and scan
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: items_test
+          POSTGRES_USER: item
+          POSTGRES_PASSWORD: ci-only-password
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U item -d items_test"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements-dev.txt
+      - run: flake8 app tests scripts --exclude=demo
+      - name: Unit and integration tests
+        env:
+          TEST_POSTGRES_URL: postgresql+psycopg://item:ci-only-password@localhost:5432/items_test
+        run: pytest -q -ra
+      - name: Build once
+        run: docker build -t inventory-api:validated .
+      - name: Scan exactly the image that will be published
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: inventory-api:validated
+          severity: CRITICAL,HIGH
+          exit-code: '1'
+          ignore-unfixed: true
+          format: table
+          output: trivy-report.txt
+      - name: Save scan evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-scan
+          path: trivy-report.txt
+      - name: Export validated image
+        run: docker save inventory-api:validated -o /tmp/validated-image.tar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: validated-image
+          path: /tmp/validated-image.tar
+          retention-days: 1

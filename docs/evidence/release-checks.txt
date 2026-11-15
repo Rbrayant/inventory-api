@@ -1,0 +1,40 @@
+Local source snapshot verification. No remote release history is implied.
+
+v1.0.0
+Prepared v1.0.0. Review, test, commit and open a PR.
+
+$ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python -m pytest -q -ra
+............s.                                                           [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_postgres.py:8: PostgreSQL integration URL not supplied
+13 passed, 1 skipped in 0.09s
+Exit: 0
+
+$ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python -m flake8 app tests scripts
+Exit: 0
+
+v1.1.0
+Prepared v1.1.0. Review, test, commit and open a PR.
+
+$ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python -m pytest -q -ra
+.............s.                                                          [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_postgres.py:8: PostgreSQL integration URL not supplied
+14 passed, 1 skipped in 0.10s
+Exit: 0
+
+$ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python -m flake8 app tests scripts
+Exit: 0
+
+v1.2.0
+Prepared v1.2.0. Review, test, commit and open a PR.
+
+$ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python -m pytest -q -ra
+.............s................                                           [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_postgres.py:8: PostgreSQL integration URL not supplied
+29 passed, 1 skipped in 0.20s
+Exit: 0
+
+$ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python -m flake8 app tests scripts
+Exit: 0
