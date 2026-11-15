@@ -72,6 +72,13 @@ def create_app(database_url=None):
     @app.get("/items")
     def list_items():
         query = select(items).order_by(items.c.id)
+        # FEATURE_FILTER_START
+        low_stock = request.args.get("low_stock", "false").lower()
+        if low_stock not in ("true", "false"):
+            return jsonify(error="low_stock must be true or false"), 400
+        if low_stock == "true":
+            query = query.where(items.c.quantity < 5)
+        # FEATURE_FILTER_END
         with engine.connect() as connection:
             return jsonify([dict(row) for row in connection.execute(
                 query
