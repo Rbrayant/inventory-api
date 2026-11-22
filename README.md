@@ -3,9 +3,10 @@
 A Flask item API with shared PostgreSQL storage, automated tests, image
 scanning, GHCR publication and verified Kubernetes rolling updates.
 
-**Status:** corrected implementation, with local test evidence. GitHub runs,
-registry publication and Kubernetes deployment still need to be performed in
-your environment. No remote success or release history is claimed.
+**Status:** v1.3.2 was successfully released through GitHub Actions and
+deployed to the local Kubernetes cluster. Validation, image publication,
+rollout verification and smoke tests passed. Two API replicas are running,
+and /version confirms v1.3.2.
 
 ## Start here
 
@@ -20,9 +21,10 @@ Run commands from this project's extracted `inventory-api` directory.
 3. Add real screenshots, logs and links to `docs/evidence/`.
 4. Update the report and presentation with your remote evidence before submission.
 
-The ZIP contains the final corrected v1.2.0 source. For a fresh assignment
-repository, prepare v1.0.0 **before your first push to main**, as described in the
-release guide. The `demo/` folders are source snapshots, not Git history.
+The verified Kubernetes release is v1.3.2. GitHub history includes the
+v1.0.0 initial release, the v1.1.0 low-stock feature and the v1.2.0
+quantity-validation fix. The demo/ folders retain source snapshots
+for explaining those changes.
 
 ## API
 
@@ -110,11 +112,15 @@ publish jobs or overwrite release tags. Source changes require a new patch versi
 
 ## Submission files
 
-- `docs/Technical_Report.pdf`: implementation and local verification, with remote
-  evidence explicitly pending.
-- `docs/Presentation.pptx`: ten editable slides for the practical presentation.
+- `docs/Technical_Report.pdf`: original technical report; needs updating
+  with the verified releases and v1.3.2 deployment evidence.
+- `docs/Presentation.pptx`: original presentation; needs the latest
+  pipeline, Kubernetes and application-version screenshots.
 - `docs/architecture.svg`: architecture diagram.
-- `docs/evidence/local-checks.txt`: actual local verification output.
-- `docs/EVIDENCE_CHECKLIST.md`: required remote evidence to add.
+- `docs/evidence/local-checks.txt`: recorded local verification.
+- `docs/EVIDENCE_CHECKLIST.md`: checklist for organising submission evidence.
 
+Verified v1.3.2 evidence includes a successful GitHub Actions release,
+two running API replicas, completed initialization and smoke-test jobs,
+and an application response confirming v1.3.2.
 
