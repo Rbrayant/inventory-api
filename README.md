@@ -117,5 +117,4 @@ publish jobs or overwrite release tags. Source changes require a new patch versi
 - `docs/evidence/local-checks.txt`: actual local verification output.
 - `docs/EVIDENCE_CHECKLIST.md`: required remote evidence to add.
 
-The lecturer also requires your accessible GitHub URL, genuine release history,
-and a live source change that rebuilds and deploys through the pipeline.
+
