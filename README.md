@@ -3,10 +3,14 @@
 A Flask item API with shared PostgreSQL storage, automated tests, image
 scanning, GHCR publication and verified Kubernetes rolling updates.
 
-**Status:** v1.3.2 was successfully released through GitHub Actions and
-deployed to the local Kubernetes cluster. Validation, image publication,
-rollout verification and smoke tests passed. Two API replicas are running,
-and /version confirms v1.3.2.
+**Release status:** [VERSION](VERSION) identifies the source release candidate.
+The latest independently verified Kubernetes deployment is **v1.3.3** at
+`6860bc6ca0d4aceb72e64685e218b6effe025270`. Its
+[release workflow](https://github.com/Rbrayant/inventory-api/actions/runs/45064287421)
+passed validation, image publication and deployment. The submitted 22 November
+capture shows two ready API replicas and completed initialization/smoke jobs.
+Check the running `/version` and `/ready` responses before assessment; this is
+recorded deployment evidence, not a fresh check of the student's laptop.
 
 ## Start here
 
@@ -17,11 +21,14 @@ port 8000 can remain running. The projects use separate database volumes.
 Run commands from this project's extracted `inventory-api` directory.
 
 1. Read `docs/SETUP.md` for GitHub, Docker and Kubernetes setup.
-2. Follow `docs/RELEASE_DEMO.md` to perform the three actual releases.
-3. Add real screenshots, logs and links to `docs/evidence/`.
-4. Update the report and presentation with your remote evidence before submission.
+2. Review [completed release evidence](docs/evidence/releases.md). The bootstrap
+   instructions in `docs/RELEASE_DEMO.md` explain the historical sequence;
+   do not reinitialize the existing repository or reuse its published versions.
+3. Follow [submission synchronization](docs/SUBMISSION_SYNC.md) to replace the
+   original report/slides and prepare the live assessment.
+4. Retain safe screenshots, logs and actual run links in `docs/evidence/`.
 
-The verified Kubernetes release is v1.3.2. GitHub history includes the
+The latest recorded Kubernetes deployment is v1.3.3. GitHub history includes the
 v1.0.0 initial release, the v1.1.0 low-stock feature and the v1.2.0
 quantity-validation fix. The demo/ folders retain source snapshots
 for explaining those changes.
@@ -30,13 +37,14 @@ for explaining those changes.
 
 | Method | Path | Purpose | Authentication |
 |---|---|---|---|
+| GET | `/` | Graphical inventory dashboard | None |
 | GET | `/health` | Process liveness | None |
 | GET | `/ready` | Database and schema readiness | None |
 | GET | `/version` | Application version and Git revision | None |
 | GET | `/items` | List records | None |
-| POST | `/items` | Create a item | Bearer token |
+| POST | `/items` | Create an item | Bearer token |
 | PATCH | `/items/<id>` | Update a nonnegative integer quantity | Bearer token |
-| DELETE | `/items/<id>` | Delete a item | Bearer token |
+| DELETE | `/items/<id>` | Delete an item | Bearer token |
 
 From v1.1.0, GET `/items?low_stock=true` returns items with a quantity below five.
 SKUs are unique. Quantities are whole numbers from 0 to 2147483647.
@@ -67,7 +75,7 @@ curl -fsS http://localhost:8001/items
 ## Tests
 
 ```bash
-python -m flake8 app tests scripts
+python -m flake8 app tests scripts --exclude=demo
 python -m pytest -q -ra
 ```
 
@@ -112,15 +120,39 @@ publish jobs or overwrite release tags. Source changes require a new patch versi
 
 ## Submission files
 
-- `docs/Technical_Report.pdf`: original technical report; needs updating
-  with the verified releases and v1.3.2 deployment evidence.
-- `docs/Presentation.pptx`: original presentation; needs the latest
-  pipeline, Kubernetes and application-version screenshots.
-- `docs/architecture.svg`: architecture diagram.
-- `docs/evidence/local-checks.txt`: recorded local verification.
-- `docs/EVIDENCE_CHECKLIST.md`: checklist for organising submission evidence.
+- `docs/Technical_Report.pdf`: original repository report. Replace it with the
+  updated ten-page report before submission; see the synchronization checklist.
+- `docs/Presentation.pptx`: original repository deck. Replace it with a fresh
+  export of the updated twelve-slide presentation, including Render evidence.
+- `docs/architecture.svg`: repository architecture diagram.
+- `docs/evidence/releases.md`: verified release, pull-request and workflow links.
+- `docs/evidence/local-checks.txt`: earlier local verification output.
+- `docs/EVIDENCE_CHECKLIST.md`: evidence categories to check before assessment.
+- `docs/SUBMISSION_SYNC.md`: outstanding artifact uploads and rehearsal checks.
 
-Verified v1.3.2 evidence includes a successful GitHub Actions release,
-two running API replicas, completed initialization and smoke-test jobs,
-and an application response confirming v1.3.2.
+The updated report and slides were prepared separately. This documentation
+correction does not claim that their binary files have already been replaced.
 
+## Public Render deployment
+
+Public application: https://inventory-api-5wpn.onrender.com/
+
+Render runs a separate Docker web service and PostgreSQL database. Its startup
+command is `python scripts/start_render.py`. Check `/ready`, `/version` and the
+selected source revision in Render before presenting. A successful local
+Kubernetes release does not prove that Render has updated. Set Render's
+`APP_VERSION` to the actual intended release and verify its response after a
+successful Render deployment; do not expose private environment values.
+
+## Live assessment change
+
+The prepared `GET /about` feature is not part of the current deployed API.
+It is reserved for the student's live source-change demonstration, with a
+focused test and a new unused release version. A documentation update alone
+does not replace that live requirement.
+
+Every push to main invokes the release workflow, including documentation
+changes. This branch proposes v1.3.4 as its next release candidate; it is not
+claimed as deployed. Recheck tags and choose a greater unused version if
+another release happens before merge. The later live feature needs its own
+new release identifier.
