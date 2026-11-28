@@ -45,6 +45,17 @@ jobs:
           ignore-unfixed: true
           format: table
           output: trivy-report.txt
+      - name: Show vulnerability findings
+        if: always()
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          report = Path("trivy-report.txt")
+          if report.exists():
+              for line in report.read_text().splitlines():
+                  if any(key in line for key in ("CVE-", "GHSA-", "Total:")):
+                      print(line)
+          PY
       - name: Save scan evidence
         if: always()
         uses: actions/upload-artifact@v4
